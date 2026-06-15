@@ -1,8 +1,11 @@
-# MenuForge v2 Reference
+# MenuForge Reference
 
 This document is the contract for sites that use MenuForge.
 The same contract is available as JSON Schema in
 `src/main/resources/menuforge-menu.schema.json`.
+
+Current package release: `0.1.0`.
+Current JSON document contract: `schemaVersion: "2.0"`.
 
 ## Concepts
 
@@ -32,7 +35,7 @@ The framework has two integration surfaces:
 
 | Field | Type | Required | Description |
 |---|---|---:|---|
-| `schemaVersion` | string | no | Document format version. Current value: `2.0`. |
+| `schemaVersion` | string | yes | Document format version. Current value: `2.0`. This is independent from the package version `0.1.0`. |
 | `instanceName` | string | no | Restaurant/menu name returned by `GET /api/menu`. Defaults to `menuforge.instance-name`. |
 | `updatedAt` | string | auto | Last write timestamp. |
 | `categories` | array | no | Ordered menu sections. |
@@ -394,6 +397,19 @@ X-MenuForge-Key: your-secret-key
 | `menuforge.api.cors-origins` | `*` | CORS origins for MenuForge endpoints. |
 | `menuforge.api.admin.enabled` | `false` | Enables external admin HTTP API. |
 | `menuforge.api.admin.api-key` | none | Required when admin HTTP is enabled. |
+
+## Versioning Policy
+
+MenuForge uses two versions:
+
+- Package/Git release version, for example `v0.1.0`.
+- JSON document `schemaVersion`, currently `"2.0"`.
+
+Patch/minor package releases may keep the same JSON schema. The JSON
+`schemaVersion` changes only when saved menu documents need a breaking migration.
+
+For `v0.1.0`, the JSON shape described in this reference and in
+`menuforge-menu.schema.json` is the definitive document contract.
 
 ## Error Format
 

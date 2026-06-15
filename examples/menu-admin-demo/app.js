@@ -73,7 +73,7 @@ async function connect() {
     state.menu = await request(publicBase());
     if (!Array.isArray(state.menu.categories)) {
       throw new Error(
-        "L'endpoint pubblico risponde, ma non sembra un MenuForge v2. " +
+        "L'endpoint pubblico risponde, ma non sembra un MenuForge compatibile. " +
         "Controlla URL e porta: per test-app usa di solito http://localhost:18081/api/menu."
       );
     }

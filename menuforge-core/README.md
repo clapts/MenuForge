@@ -1,8 +1,11 @@
-# MenuForge Core v2
+# MenuForge Core
 
 MenuForge is an embeddable Spring Boot framework for digital restaurant and bar
 menus. It is made for agencies that build many client sites and want to stop
 rewriting the same menu-management logic every time.
+
+Current package release: `0.1.0`.
+Current JSON document contract: `schemaVersion: "2.0"`.
 
 MenuForge does not force a prebuilt admin UI. Each website can build its own
 admin section, matching its design and authentication system, while reusing the
@@ -61,7 +64,7 @@ Add MenuForge to the Spring Boot site:
 <dependency>
     <groupId>it.menuforge</groupId>
     <artifactId>menuforge-core</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
@@ -171,7 +174,8 @@ Minimal example:
 }
 ```
 
-See [REFERENCE.md](REFERENCE.md) for the complete field reference.
+See [REFERENCE.md](REFERENCE.md) and [../docs/JSON_FORMAT.md](../docs/JSON_FORMAT.md)
+for the complete field reference.
 The machine-readable JSON Schema is bundled at
 `classpath:menuforge-menu.schema.json`.
 
@@ -228,7 +232,7 @@ mvn install
 
 cd ..\test-app
 mvn package -DskipTests
-java -jar target\test-app-2.0.0-SNAPSHOT.jar --server.port=18081
+java -jar target\test-app-0.1.0.jar --server.port=18081
 ```
 
 Then open:
@@ -248,6 +252,9 @@ See [examples/README.md](examples/README.md) for:
 - an external HTTP client for bots/automation;
 - a realistic importable `MenuDocument` JSON.
 - a standalone non-technical admin demo in `../examples/menu-admin-demo`.
+
+For a more guided implementation flow, read
+[../docs/REAL_SITE_INTEGRATION.md](../docs/REAL_SITE_INTEGRATION.md).
 
 ## Next Steps For A Real Site
 

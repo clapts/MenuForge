@@ -13,7 +13,7 @@
 
     <groupId>it.menuforge</groupId>
     <artifactId>test-app</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 
     <properties>
         <java.version>21</java.version>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>it.menuforge</groupId>
             <artifactId>menuforge-core</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>0.1.0</version>
         </dependency>
     </dependencies>
 
