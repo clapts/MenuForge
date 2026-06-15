@@ -21,7 +21,7 @@ HTTP API.
 - Public read-only HTTP endpoints for the frontend.
 - Optional protected HTTP admin endpoints for Telegram bots, agency tools, or
   other external integrations.
-- Full menu import/export, so menus extracted from photos/OCR/AI can be loaded
+- Full menu import/export, so menus extracted from photos, OCR or manual entry can be loaded
   in one operation.
 
 ## What MenuForge Does Not Provide Yet
@@ -55,6 +55,11 @@ The important rule is simple:
 
 - Inside the website backend: use Java methods. No MenuForge API key is needed.
 - Outside the website backend: use HTTP admin endpoints. API key is required.
+
+In other words: if the code is running in the same backend where MenuForge is
+installed, call `CategoryService`, `MenuItemService`, `MenuDocumentService`,
+`BadgeService`, `AllergenService` or `MenuQueryService` directly. Use the admin
+HTTP API only when the caller is outside that backend.
 
 ## Installation
 
@@ -181,7 +186,8 @@ The machine-readable JSON Schema is bundled at
 
 ## Full Menu Import
 
-When you convert a paper menu photo into JSON, import it in Java:
+When you convert a paper menu, PDF, spreadsheet or text list into JSON, import
+it in Java:
 
 ```java
 MenuDocument document = ...;
@@ -195,6 +201,9 @@ PUT /api/menu/admin/import
 X-MenuForge-Key: your-secret-key
 Content-Type: application/json
 ```
+
+For a practical conversion guide, read
+[../docs/MENU_DATA_TO_JSON.md](../docs/MENU_DATA_TO_JSON.md).
 
 ## External HTTP Admin API
 
@@ -215,8 +224,9 @@ X-MenuForge-Key: your-secret-key
 ```
 
 Use this for Telegram bots, agency dashboards, deployment scripts, or automated
-menu imports. Do not use it as the primary security layer for the site's own
-admin panel.
+menu imports. Do not use it for the site's own admin panel when that panel is
+already backed by the same Spring application: in that case, call Java services
+directly after the site has authenticated the owner.
 
 ## Demo App
 

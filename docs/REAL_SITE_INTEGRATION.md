@@ -53,6 +53,10 @@ If the restaurant owner is already logged into the website admin area, do not
 call MenuForge admin HTTP endpoints from the browser. Instead, create your own
 site admin endpoints and call MenuForge Java services from the backend.
 
+This is the preferred integration for normal client websites. The site's backend
+already knows who the admin user is, so it can call MenuForge methods directly
+without `X-MenuForge-Key`.
+
 ```java
 @RestController
 @RequestMapping("/admin/menu")
@@ -80,6 +84,18 @@ class SiteMenuAdminController {
 Protect `/admin/menu/**` with the site's normal authentication and authorization.
 No MenuForge API key is needed in this flow.
 
+Typical internal service calls:
+
+| Task | Java service |
+|---|---|
+| Read full document for admin editing | `MenuDocumentService.exportMenu()` |
+| Import a full JSON menu | `MenuDocumentService.replaceMenu(document)` |
+| Create/update/delete categories | `CategoryService` |
+| Create/update/delete products | `MenuItemService` |
+| Create/update/delete badges | `BadgeService` |
+| Read allergen catalog | `AllergenService` |
+| Render public menu/search | `MenuQueryService` |
+
 ## External Tools
 
 Enable the admin HTTP API only for external tools such as:
@@ -104,6 +120,10 @@ Every external admin request must include:
 X-MenuForge-Key: your-secret-key
 ```
 
+Do not use this external API as a shortcut inside the same website backend.
+Inside the backend, direct Java methods are simpler, faster and avoid exposing
+an extra admin surface.
+
 ## Common Real Site Flow
 
 1. Convert the paper/PDF menu to a `MenuDocument` JSON.
@@ -123,4 +143,3 @@ X-MenuForge-Key: your-secret-key
 - Do not expose the admin HTTP API unless needed.
 - Do not commit production menu files containing private data.
 - Keep image uploads outside MenuForge; store only URLs/paths in menu items.
-

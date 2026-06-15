@@ -33,7 +33,18 @@ Current release: `v0.1.0`.
 1. Read [menuforge-core/README.md](menuforge-core/README.md).
 2. Read [docs/REAL_SITE_INTEGRATION.md](docs/REAL_SITE_INTEGRATION.md).
 3. Check the JSON contract in [docs/JSON_FORMAT.md](docs/JSON_FORMAT.md).
-4. Try the standalone demo in [examples/menu-admin-demo](examples/menu-admin-demo).
+4. Convert menu data with [docs/MENU_DATA_TO_JSON.md](docs/MENU_DATA_TO_JSON.md).
+5. Try the standalone demo in [examples/menu-admin-demo](examples/menu-admin-demo).
+
+## Internal Backend vs External API
+
+Inside a client website backend, call MenuForge Java services directly:
+`CategoryService`, `MenuItemService`, `MenuDocumentService`, `BadgeService`,
+`AllergenService` and `MenuQueryService`.
+
+Do not call the admin HTTP API from the website backend just to manage the menu.
+The admin HTTP API exists for external integrations: bots, agency tools,
+automation scripts or separate dashboards that are outside the website backend.
 
 ## Local Demo
 
@@ -57,4 +68,3 @@ Then serve/open `examples/menu-admin-demo/index.html` and connect it to:
 MenuForge v0.1.0 is ready as an internal MVP framework. Before using it on a
 public client site, configure API keys from environment variables, restrict CORS
 to known domains, and keep backups enabled.
-
