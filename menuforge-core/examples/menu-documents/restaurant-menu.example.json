@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "2.0",
+  "instanceName": "Ristorante Aurora",
+  "categories": [
+    {
+      "id": "antipasti",
+      "slug": "antipasti",
+      "title": "Antipasti",
+      "subtitle": "Per iniziare",
+      "visible": true,
+      "position": 0,
+      "items": [
+        {
+          "id": "tagliere-aurora",
+          "title": "Tagliere Aurora",
+          "price": "14,00",
+          "description": "Selezione di salumi, formaggi e confetture",
+          "available": true,
+          "position": 0,
+          "ingredients": ["Salumi", "Formaggi", "Confetture"],
+          "tag1": ["consigliato"],
+          "tag2": ["homepage"],
+          "tag3": ["telegram-orderable"],
+          "badges": [
+            { "id": "consigliato", "label": "Consigliato", "style": "gold" }
+          ],
+          "allergens": [
+            { "id": 7, "code": "MILK", "nameIt": "Latte e prodotti a base di latte" }
+          ],
+          "customAttributes": [
+            { "key": "preparationTime", "value": "10 min", "displayLabel": "Tempo di preparazione" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pizze",
+      "slug": "pizze",
+      "title": "Pizze",
+      "subtitle": "Impasto a lunga lievitazione",
+      "visible": true,
+      "position": 1,
+      "items": [
+        {
+          "id": "margherita",
+          "title": "Margherita",
+          "price": "7,00",
+          "description": "Pomodoro, mozzarella, basilico",
+          "available": true,
+          "position": 0,
+          "ingredients": ["Pomodoro", "Mozzarella", "Basilico"],
+          "tag1": ["classico"],
+          "tag2": [],
+          "tag3": ["telegram-orderable"],
+          "badges": [],
+          "allergens": [
+            { "id": 1, "code": "GLUTEN", "nameIt": "Cereali contenenti glutine" },
+            { "id": 7, "code": "MILK", "nameIt": "Latte e prodotti a base di latte" }
+          ],
+          "customAttributes": []
+        },
+        {
+          "id": "diavola",
+          "title": "Diavola",
+          "price": "8,50",
+          "description": "Pomodoro, mozzarella, salame piccante",
+          "available": true,
+          "position": 1,
+          "ingredients": ["Pomodoro", "Mozzarella", "Salame piccante"],
+          "tag1": ["piccante"],
+          "tag2": ["featured"],
+          "tag3": ["telegram-orderable"],
+          "badges": [
+            { "id": "piccante", "label": "Piccante", "style": "red" }
+          ],
+          "allergens": [
+            { "id": 1, "code": "GLUTEN", "nameIt": "Cereali contenenti glutine" },
+            { "id": 7, "code": "MILK", "nameIt": "Latte e prodotti a base di latte" }
+          ],
+          "customAttributes": []
+        }
+      ]
+    }
+  ],
+  "badges": [
+    { "id": "consigliato", "label": "Consigliato", "style": "gold" },
+    { "id": "piccante", "label": "Piccante", "style": "red" }
+  ],
+  "allergens": []
+}

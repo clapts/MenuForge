@@ -1,0 +1,13 @@
+menuforge:
+  enabled: true
+  instance-name: "Test Restaurant"
+  data-dir: "./menuforge-data"
+  menu-file: "menu.json"
+  backup-on-write: true
+  api:
+    base-path: /api/menu
+    admin-base-path: /api/menu/admin
+    cors-origins: "*"
+    admin:
+      enabled: true
+      api-key: "local-dev-key"

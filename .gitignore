@@ -1,0 +1,22 @@
+# Java / Maven
+target/
+*.class
+maven/
+
+# Runtime data
+*.db
+*.sqlite
+*.sqlite3
+*.log
+*.backup.json
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# MenuForge local runtime files
+menuforge-data/*.db
+menuforge-data/*.log
+menuforge-data/*.backup.json

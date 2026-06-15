@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MenuForge v2 Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; display: grid; grid-template-columns: 1fr 360px; min-height: 100vh; background: #f7f7f4; color: #20201d; }
+        main { padding: 28px; }
+        aside { padding: 24px; background: #ffffff; border-left: 1px solid #d9d8d2; }
+        h1, h2, h3 { margin-top: 0; }
+        .category { margin: 0 0 20px; padding-bottom: 18px; border-bottom: 1px solid #d9d8d2; }
+        .item { display: flex; justify-content: space-between; gap: 20px; padding: 10px 0; }
+        .muted { color: #686861; }
+        input, textarea, select, button { width: 100%; box-sizing: border-box; margin: 6px 0 12px; padding: 9px; font: inherit; }
+        button { cursor: pointer; border: 1px solid #222; background: #222; color: white; }
+        button.secondary { background: white; color: #222; }
+        button.danger { background: #9d1c1c; border-color: #9d1c1c; }
+        pre { white-space: pre-wrap; background: #efeee9; padding: 12px; max-height: 240px; overflow: auto; }
+    </style>
+</head>
+<body>
+<main>
+    <h1 id="title">MenuForge v2</h1>
+    <div id="menu"></div>
+</main>
+<aside>
+    <h2>Admin HTTP demo</h2>
+    <label>API key esterna</label>
+    <input id="api-key" value="local-dev-key">
+
+    <h3>Nuova categoria</h3>
+    <input id="category-title" placeholder="Es. Pizze">
+    <button onclick="createCategory()">Crea categoria</button>
+
+    <h3>Nuovo piatto</h3>
+    <select id="category-select"></select>
+    <input id="item-title" placeholder="Es. Margherita">
+    <input id="item-price" placeholder="Es. 6,00">
+    <textarea id="item-description" placeholder="Descrizione"></textarea>
+    <button onclick="createItem()">Crea piatto</button>
+
+    <h3>Import / export</h3>
+    <button class="secondary" onclick="exportMenu()">Esporta JSON</button>
+    <textarea id="import-json" rows="8" placeholder="Incolla qui un MenuDocument JSON completo"></textarea>
+    <button onclick="importMenu()">Importa e sostituisci menu</button>
+    <pre id="output"></pre>
+</aside>
+<script>
+    const adminBase = '/api/menu/admin';
+
+    function adminHeaders() {
+        return {
+            'Content-Type': 'application/json',
+            'X-MenuForge-Key': document.getElementById('api-key').value
+        };
+    }
+
+    async function loadMenu() {
+        const res = await fetch('/api/menu');
+        const data = await res.json();
+        document.getElementById('title').textContent = data.instanceName || 'Menu';
+        const menu = document.getElementById('menu');
+        const select = document.getElementById('category-select');
+        menu.innerHTML = '';
+        select.innerHTML = '';
+        (data.categories || []).forEach(category => {
+            select.insertAdjacentHTML('beforeend', `<option value="${category.slug}">${category.title}</option>`);
+            const items = (category.items || []).map(item => `
+                <div class="item">
+                    <div><strong>${item.title}</strong><div class="muted">${item.description || ''}</div></div>
+                    <div>${item.price || ''}</div>
+                </div>
+            `).join('');
+            menu.insertAdjacentHTML('beforeend', `
+                <section class="category">
+                    <h2>${category.title}</h2>
+                    ${items || '<p class="muted">Nessun piatto.</p>'}
+                    <button class="danger" onclick="deleteCategory('${category.slug}')">Elimina categoria</button>
+                </section>
+            `);
+        });
+    }
+
+    async function createCategory() {
+        const title = document.getElementById('category-title').value;
+        const res = await fetch(`${adminBase}/categories`, {
+            method: 'POST',
+            headers: adminHeaders(),
+            body: JSON.stringify({ title })
+        });
+        show(await res.text());
+        await loadMenu();
+    }
+
+    async function createItem() {
+        const slug = document.getElementById('category-select').value;
+        const body = {
+            title: document.getElementById('item-title').value,
+            price: document.getElementById('item-price').value,
+            description: document.getElementById('item-description').value
+        };
+        const res = await fetch(`${adminBase}/categories/${slug}/items`, {
+            method: 'POST',
+            headers: adminHeaders(),
+            body: JSON.stringify(body)
+        });
+        show(await res.text());
+        await loadMenu();
+    }
+
+    async function deleteCategory(slug) {
+        const res = await fetch(`${adminBase}/categories/${slug}`, {
+            method: 'DELETE',
+            headers: adminHeaders()
+        });
+        show(`DELETE ${slug}: ${res.status}`);
+        await loadMenu();
+    }
+
+    async function exportMenu() {
+        const res = await fetch(`${adminBase}/export`, { headers: adminHeaders() });
+        const json = await res.json();
+        const text = JSON.stringify(json, null, 2);
+        document.getElementById('import-json').value = text;
+        show(text);
+    }
+
+    async function importMenu() {
+        const res = await fetch(`${adminBase}/import`, {
+            method: 'PUT',
+            headers: adminHeaders(),
+            body: document.getElementById('import-json').value
+        });
+        show(await res.text());
+        await loadMenu();
+    }
+
+    function show(value) {
+        document.getElementById('output').textContent = value;
+    }
+
+    loadMenu();
+</script>
+</body>
+</html>

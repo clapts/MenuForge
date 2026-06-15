@@ -1,0 +1,104 @@
+{
+  "schemaVersion" : "2.0",
+  "instanceName" : "Test Restaurant",
+  "updatedAt" : "2026-06-14T19:16:06.213640400Z",
+  "categories" : [ {
+    "id" : "pizze",
+    "slug" : "pizze",
+    "title" : "Pizze",
+    "subtitle" : null,
+    "note" : null,
+    "categoryImageUrl" : null,
+    "visible" : true,
+    "position" : 0,
+    "items" : [ {
+      "id" : "margherita",
+      "title" : "Margherita",
+      "price" : "6,00",
+      "description" : "Pomodoro, mozzarella, basilico",
+      "imageUrl" : null,
+      "highlight" : false,
+      "available" : true,
+      "position" : 0,
+      "calories" : null,
+      "origin" : null,
+      "format" : null,
+      "specialText1" : null,
+      "specialText2" : null,
+      "specialText3" : null,
+      "ingredients" : [ "Pomodoro", "Mozzarella", "Basilico" ],
+      "tag1" : [ "classico" ],
+      "tag2" : [ ],
+      "tag3" : [ ],
+      "badges" : [ ],
+      "allergens" : [ {
+        "id" : 1,
+        "code" : "GLUTEN",
+        "nameIt" : "Cereali contenenti glutine"
+      }, {
+        "id" : 7,
+        "code" : "MILK",
+        "nameIt" : "Latte e prodotti a base di latte"
+      } ],
+      "customAttributes" : [ ]
+    } ]
+  } ],
+  "badges" : [ ],
+  "allergens" : [ {
+    "id" : 1,
+    "code" : "GLUTEN",
+    "nameIt" : "Cereali contenenti glutine"
+  }, {
+    "id" : 2,
+    "code" : "CRUSTACEANS",
+    "nameIt" : "Crostacei e prodotti a base di crostacei"
+  }, {
+    "id" : 3,
+    "code" : "EGGS",
+    "nameIt" : "Uova e prodotti a base di uova"
+  }, {
+    "id" : 4,
+    "code" : "FISH",
+    "nameIt" : "Pesce e prodotti a base di pesce"
+  }, {
+    "id" : 5,
+    "code" : "PEANUTS",
+    "nameIt" : "Arachidi e prodotti a base di arachidi"
+  }, {
+    "id" : 6,
+    "code" : "SOYBEANS",
+    "nameIt" : "Soia e prodotti a base di soia"
+  }, {
+    "id" : 7,
+    "code" : "MILK",
+    "nameIt" : "Latte e prodotti a base di latte"
+  }, {
+    "id" : 8,
+    "code" : "NUTS",
+    "nameIt" : "Frutta a guscio"
+  }, {
+    "id" : 9,
+    "code" : "CELERY",
+    "nameIt" : "Sedano e prodotti a base di sedano"
+  }, {
+    "id" : 10,
+    "code" : "MUSTARD",
+    "nameIt" : "Senape e prodotti a base di senape"
+  }, {
+    "id" : 11,
+    "code" : "SESAME",
+    "nameIt" : "Semi di sesamo"
+  }, {
+    "id" : 12,
+    "code" : "SULPHITES",
+    "nameIt" : "Anidride solforosa e solfiti"
+  }, {
+    "id" : 13,
+    "code" : "LUPIN",
+    "nameIt" : "Lupini e prodotti a base di lupini"
+  }, {
+    "id" : 14,
+    "code" : "MOLLUSCS",
+    "nameIt" : "Molluschi e prodotti a base di molluschi"
+  } ]
+}

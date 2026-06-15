@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://menuforge.local/schema/menu-document-v2.json",
+  "title": "MenuForge MenuDocument v2",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "2.0"
+    },
+    "instanceName": {
+      "type": ["string", "null"]
+    },
+    "updatedAt": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "categories": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/category" },
+      "default": []
+    },
+    "badges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/badge" },
+      "default": []
+    },
+    "allergens": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/allergen" },
+      "default": []
+    }
+  },
+  "required": ["schemaVersion", "categories"],
+  "$defs": {
+    "category": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": ["string", "null"] },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "subtitle": { "type": ["string", "null"] },
+        "note": { "type": ["string", "null"] },
+        "categoryImageUrl": { "type": ["string", "null"] },
+        "visible": { "type": "boolean", "default": true },
+        "position": { "type": "integer", "minimum": 0, "default": 0 },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/menuItem" },
+          "default": []
+        }
+      },
+      "required": ["slug", "title"]
+    },
+    "menuItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "price": { "type": ["string", "null"] },
+        "description": { "type": ["string", "null"] },
+        "imageUrl": { "type": ["string", "null"] },
+        "highlight": { "type": "boolean", "default": false },
+        "available": { "type": "boolean", "default": true },
+        "position": { "type": "integer", "minimum": 0, "default": 0 },
+        "calories": { "type": ["string", "null"] },
+        "origin": { "type": ["string", "null"] },
+        "format": { "type": ["string", "null"] },
+        "specialText1": { "type": ["string", "null"] },
+        "specialText2": { "type": ["string", "null"] },
+        "specialText3": { "type": ["string", "null"] },
+        "ingredients": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "tag1": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "tag2": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "tag3": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "badges": { "type": "array", "items": { "$ref": "#/$defs/badge" }, "default": [] },
+        "allergens": { "type": "array", "items": { "$ref": "#/$defs/allergen" }, "default": [] },
+        "customAttributes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/customAttribute" },
+          "default": []
+        }
+      },
+      "required": ["id", "title"]
+    },
+    "badge": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "label": { "type": "string", "minLength": 1 },
+        "style": { "type": ["string", "null"] }
+      },
+      "required": ["id", "label"]
+    },
+    "allergen": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "integer", "minimum": 1, "maximum": 14 },
+        "code": { "type": "string", "minLength": 1 },
+        "nameIt": { "type": "string", "minLength": 1 }
+      },
+      "required": ["id", "code", "nameIt"]
+    },
+    "customAttribute": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": { "type": "string", "minLength": 1 },
+        "value": { "type": ["string", "null"] },
+        "displayLabel": { "type": ["string", "null"] }
+      },
+      "required": ["key"]
+    }
+  }
+}

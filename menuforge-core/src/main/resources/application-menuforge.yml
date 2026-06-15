@@ -1,0 +1,12 @@
+menuforge:
+  enabled: true
+  instance-name: MenuForge
+  data-dir: ./menuforge-data
+  menu-file: menu.json
+  backup-on-write: true
+  api:
+    base-path: /api/menu
+    admin-base-path: /api/menu/admin
+    cors-origins: "*"
+    admin:
+      enabled: false
