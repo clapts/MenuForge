@@ -9,8 +9,8 @@ Non e' una sezione admin definitiva da copiare nei siti dei clienti. E' un esemp
 1. Avvia un backend che usa MenuForge, per esempio `test-app`.
 2. Apri `index.html` nel browser, oppure servila con un server statico.
 3. Imposta:
-   - Public API base: `http://localhost:8080/api/menu`
-   - Admin API base: `http://localhost:8080/api/menu/admin`
+   - Public API base: `http://localhost:18081/api/menu`
+   - Admin API base: `http://localhost:18081/api/menu/admin`
    - Admin API key: `local-dev-key`
 4. Premi `Connetti`.
 
@@ -45,4 +45,3 @@ Non e' una sezione admin definitiva da copiare nei siti dei clienti. E' un esemp
 - `styles.css`: stile completo.
 - `app.js`: logica HTTP e stato locale.
 - `sample-menu.json`: menu dimostrativo importabile.
-

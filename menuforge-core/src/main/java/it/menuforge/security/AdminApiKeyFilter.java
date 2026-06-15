@@ -77,6 +77,11 @@ public class AdminApiKeyFilter implements Filter {
             return;
         }
 
+        if ("OPTIONS".equalsIgnoreCase(httpReq.getMethod())) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String providedKey = httpReq.getHeader(HEADER_NAME);
 
         if (providedKey == null || providedKey.isBlank()) {

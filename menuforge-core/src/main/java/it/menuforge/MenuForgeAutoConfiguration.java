@@ -1,5 +1,6 @@
 package it.menuforge;
 
+import jakarta.servlet.Filter;
 import it.menuforge.security.AdminApiKeyFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +10,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
+import java.util.List;
 
 @AutoConfiguration
 @ConditionalOnProperty(prefix = "menuforge", name = "enabled", havingValue = "true", matchIfMissing = true)
@@ -21,22 +23,62 @@ public class MenuForgeAutoConfiguration {
     private static final Logger log = LoggerFactory.getLogger(MenuForgeAutoConfiguration.class);
 
     @Bean
-    public WebMvcConfigurer menuForgeCorsConfigurer(MenuForgeProperties props) {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                String origins = props.getApi().getCorsOrigins();
-                registry.addMapping(props.getApi().getBasePath() + "/**")
-                        .allowedOrigins(origins)
-                        .allowedMethods("GET", "OPTIONS");
+    public FilterRegistrationBean<Filter> menuForgeCorsFilter(MenuForgeProperties props) {
+        Filter filter = (request, response, chain) -> {
+            jakarta.servlet.http.HttpServletRequest httpReq = (jakarta.servlet.http.HttpServletRequest) request;
+            jakarta.servlet.http.HttpServletResponse httpResp = (jakarta.servlet.http.HttpServletResponse) response;
+            String path = httpReq.getRequestURI();
+            boolean menuForgeRequest = path.equals(props.getApi().getBasePath())
+                    || path.startsWith(props.getApi().getBasePath() + "/")
+                    || path.equals(props.getApi().getAdminBasePath())
+                    || path.startsWith(props.getApi().getAdminBasePath() + "/");
 
-                if (props.getApi().getAdmin().isEnabled()) {
-                    registry.addMapping(props.getApi().getAdminBasePath() + "/**")
-                            .allowedOrigins(origins)
-                            .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS");
-                }
+            if (!menuForgeRequest) {
+                chain.doFilter(request, response);
+                return;
             }
+
+            String origin = httpReq.getHeader("Origin");
+
+            if (origin != null && isAllowedOrigin(origin, props.getApi().getCorsOrigins())) {
+                httpResp.setHeader("Access-Control-Allow-Origin", corsOriginValue(origin, props.getApi().getCorsOrigins()));
+                httpResp.setHeader("Vary", "Origin");
+                httpResp.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+                httpResp.setHeader("Access-Control-Allow-Headers", "Content-Type,X-MenuForge-Key,Authorization");
+                httpResp.setHeader("Access-Control-Max-Age", "3600");
+            }
+
+            if ("OPTIONS".equalsIgnoreCase(httpReq.getMethod())) {
+                httpResp.setStatus(jakarta.servlet.http.HttpServletResponse.SC_OK);
+                return;
+            }
+
+            chain.doFilter(request, response);
         };
+
+        FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>(filter);
+        registration.addUrlPatterns("/*");
+        registration.setOrder(0);
+        return registration;
+    }
+
+    private boolean isAllowedOrigin(String origin, String configuredOrigins) {
+        List<String> origins = parseOrigins(configuredOrigins);
+        return origins.contains("*") || origins.contains(origin);
+    }
+
+    private List<String> parseOrigins(String origins) {
+        if (origins == null || origins.isBlank()) {
+            return List.of("*");
+        }
+        return Arrays.stream(origins.split(","))
+                .map(String::trim)
+                .filter(origin -> !origin.isBlank())
+                .toList();
+    }
+
+    private String corsOriginValue(String requestOrigin, String configuredOrigins) {
+        return parseOrigins(configuredOrigins).contains("*") ? "*" : requestOrigin;
     }
 
     @Bean
@@ -52,7 +94,7 @@ public class MenuForgeAutoConfiguration {
         log.info("MenuForge external admin HTTP API enabled on {}", props.getApi().getAdminBasePath());
         AdminApiKeyFilter filter = new AdminApiKeyFilter(props);
         FilterRegistrationBean<AdminApiKeyFilter> registration = new FilterRegistrationBean<>(filter);
-        registration.addUrlPatterns(props.getApi().getAdminBasePath() + "/*");
+        registration.addUrlPatterns("/*");
         registration.setOrder(1);
         return registration;
     }

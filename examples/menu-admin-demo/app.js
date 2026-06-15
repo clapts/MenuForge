@@ -47,7 +47,15 @@ function adminHeaders() {
 }
 
 async function request(url, options = {}) {
-  const response = await fetch(url, options);
+  let response;
+  try {
+    response = await fetch(url, options);
+  } catch (error) {
+    throw new Error(
+      `Impossibile raggiungere ${url}. Controlla che il backend MenuForge sia avviato, ` +
+      `che la porta sia corretta e che CORS permetta l'header X-MenuForge-Key. Dettaglio: ${error.message}`
+    );
+  }
   const contentType = response.headers.get("content-type") || "";
   const body = contentType.includes("application/json") ? await response.json() : await response.text();
 
@@ -63,6 +71,12 @@ async function connect() {
   try {
     setStatus("Connessione in corso...");
     state.menu = await request(publicBase());
+    if (!Array.isArray(state.menu.categories)) {
+      throw new Error(
+        "L'endpoint pubblico risponde, ma non sembra un MenuForge v2. " +
+        "Controlla URL e porta: per test-app usa di solito http://localhost:18081/api/menu."
+      );
+    }
     state.connected = true;
     if (!state.selectedCategorySlug) {
       state.selectedCategorySlug = state.menu.categories?.[0]?.slug || null;
@@ -595,4 +609,3 @@ document.querySelectorAll(".tab").forEach(tab => {
 
 setStatus("Pronta. Inserisci API e premi Connetti.");
 render();
-
