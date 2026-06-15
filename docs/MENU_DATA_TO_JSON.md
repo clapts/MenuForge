@@ -30,8 +30,12 @@ Required top-level fields:
 Recommended top-level fields:
 
 - `instanceName`: restaurant/bar/menu name when known.
-- `badges`: shared badges, can be `[]`.
-- `allergens`: can be omitted or `[]`; MenuForge can seed standard EU allergens.
+- `badges`: shared badges only if used.
+- `allergens`: can be omitted; MenuForge can seed standard EU allergens.
+
+Do not write empty optional fields just to fill the shape. If `tag2`, `badges`,
+`calories`, `origin`, `imageUrl`, `customAttributes` or another optional field
+is not useful, omit it.
 
 ## Category Rules
 
@@ -58,8 +62,8 @@ Recommended category fields:
 - `subtitle`: short secondary text when present.
 - `note`: warnings or notes that apply to the whole category.
 - `visible`: normally `true`.
-- `position`: zero-based order.
-- `items`: array of products.
+- `position`: zero-based order. Omit it when the natural order is enough.
+- `items`: array of products. Omit it only for empty categories.
 
 Example:
 
@@ -70,8 +74,6 @@ Example:
   "title": "Pizze",
   "subtitle": "Impasto a lunga lievitazione",
   "note": "Disponibili anche con impasto integrale",
-  "visible": true,
-  "position": 0,
   "items": []
 }
 ```
@@ -111,9 +113,8 @@ Optional product fields:
 - `badges`
 - `customAttributes`
 
-If a field is not present in the source menu, use `null`, an empty string or an
-empty array depending on the field style used by the target project. Do not make
-up calories, origin, allergens, tags or badges.
+If a field is not present in the source menu, omit it. Do not make up calories,
+origin, allergens, tags or badges.
 
 Example:
 
@@ -123,26 +124,12 @@ Example:
   "title": "Margherita",
   "price": "6,00",
   "description": "Pomodoro, mozzarella, basilico",
-  "imageUrl": "",
-  "highlight": false,
-  "available": true,
-  "position": 0,
-  "calories": "",
-  "origin": "",
-  "format": "",
-  "specialText1": "",
-  "specialText2": "",
-  "specialText3": "",
   "ingredients": ["Pomodoro", "Mozzarella", "Basilico"],
   "tag1": ["classico"],
-  "tag2": [],
-  "tag3": [],
-  "badges": [],
   "allergens": [
     { "id": 1, "code": "GLUTEN", "nameIt": "Cereali contenenti glutine" },
     { "id": 7, "code": "MILK", "nameIt": "Latte e prodotti a base di latte" }
-  ],
-  "customAttributes": []
+  ]
 }
 ```
 
@@ -231,7 +218,7 @@ If the original menu does not contain labels such as "Novita", "Consigliato",
 8. Put ingredient text in `description`; also split into `ingredients` when easy.
 9. Add allergens only when known.
 10. Generate stable lowercase slugs/IDs.
-11. Leave unknown optional fields empty.
+11. Omit unknown or unused optional fields.
 12. Validate the JSON against `menuforge-menu.schema.json`.
 13. Import through `MenuDocumentService.replaceMenu(document)` or
     `PUT /api/menu/admin/import`.
@@ -253,23 +240,10 @@ If the original menu does not contain labels such as "Novita", "Consigliato",
         {
           "id": "espresso",
           "title": "Espresso",
-          "price": "1,20",
-          "description": "",
-          "available": true,
-          "position": 0,
-          "ingredients": [],
-          "tag1": [],
-          "tag2": [],
-          "tag3": [],
-          "badges": [],
-          "allergens": [],
-          "customAttributes": []
+          "price": "1,20"
         }
       ]
     }
-  ],
-  "badges": [],
-  "allergens": []
+  ]
 }
 ```
-

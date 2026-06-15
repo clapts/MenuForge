@@ -31,6 +31,12 @@ The framework has two integration surfaces:
 }
 ```
 
+You can omit optional fields when they are empty or not useful. For example, an
+item does not need `tag2`, `badges`, `allergens`, `customAttributes`,
+`position`, `imageUrl` or `calories` unless that information is actually used.
+The tables below describe what you may provide, not what every object must
+contain.
+
 ### `MenuDocument`
 
 | Field | Type | Required | Description |

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,7 +23,9 @@ public class MenuDocument {
     @Builder.Default
     private List<Category> categories = new ArrayList<>();
     @Builder.Default
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Badge> badges = new ArrayList<>();
     @Builder.Default
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Allergen> allergens = new ArrayList<>();
 }

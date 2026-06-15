@@ -157,15 +157,12 @@ Minimal example:
     {
       "slug": "pizze",
       "title": "Pizze",
-      "visible": true,
-      "position": 0,
       "items": [
         {
           "id": "margherita",
           "title": "Margherita",
           "price": "6,00",
           "description": "Pomodoro, mozzarella, basilico",
-          "available": true,
           "ingredients": ["Pomodoro", "Mozzarella", "Basilico"],
           "tag1": ["classico"],
           "allergens": [
@@ -178,6 +175,10 @@ Minimal example:
   ]
 }
 ```
+
+Only required fields must be written. Empty optional fields such as `tag2`,
+`badges`, `customAttributes`, `imageUrl`, `calories` or `position: 0` can be
+omitted to keep the JSON clean.
 
 See [REFERENCE.md](REFERENCE.md) and [../docs/JSON_FORMAT.md](../docs/JSON_FORMAT.md)
 for the complete field reference.

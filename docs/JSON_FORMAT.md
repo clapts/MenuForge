@@ -16,6 +16,8 @@ change.
 
 - `schemaVersion` must be `"2.0"`.
 - `categories` must exist and must be an array.
+- Empty optional fields can be omitted. You do not need to write `tag2: []`,
+  `badges: []`, `position: 0`, empty descriptions or other unused fields.
 - Category `slug` values must be lowercase slugs: `pizze`, `menu-pranzo`.
 - Item `id` values must be globally unique across the whole menu.
 - Badge `id` values must be unique.
@@ -29,13 +31,36 @@ change.
 {
   "schemaVersion": "2.0",
   "instanceName": "Ristorante Demo",
-  "categories": [],
-  "badges": [],
-  "allergens": []
+  "categories": []
 }
 ```
 
 When allergens are missing, MenuForge fills the standard 14 EU allergens.
+
+## Minimal Real Menu
+
+```json
+{
+  "schemaVersion": "2.0",
+  "instanceName": "Ristorante Demo",
+  "categories": [
+    {
+      "slug": "pizze",
+      "title": "Pizze",
+      "items": [
+        {
+          "id": "margherita",
+          "title": "Margherita",
+          "price": "6,00",
+          "description": "Pomodoro, mozzarella, basilico"
+        }
+      ]
+    }
+  ]
+}
+```
+
+This is valid. MenuForge supplies defaults for omitted optional fields.
 
 ## Full Product Example
 
@@ -104,4 +129,3 @@ Source path:
 ```text
 menuforge-core/src/main/resources/menuforge-menu.schema.json
 ```
-

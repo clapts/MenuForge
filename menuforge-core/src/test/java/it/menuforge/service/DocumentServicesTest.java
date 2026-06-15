@@ -10,6 +10,7 @@ import it.menuforge.model.MenuDocument;
 import it.menuforge.model.MenuItem;
 import it.menuforge.storage.JsonFileMenuStorage;
 import it.menuforge.storage.MenuStorage;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -108,6 +109,42 @@ class DocumentServicesTest {
         assertThatThrownBy(() -> menuDocumentService.replaceMenu(document))
                 .isInstanceOf(DuplicateMenuResourceException.class)
                 .hasMessageContaining("Duplicate category slug");
+    }
+
+    @Test
+    void replaceMenuAcceptsMinimalJsonWithoutEmptyOptionalFields() throws Exception {
+        String json = """
+                {
+                  "schemaVersion": "2.0",
+                  "instanceName": "Minimal Restaurant",
+                  "categories": [
+                    {
+                      "slug": "pizze",
+                      "title": "Pizze",
+                      "items": [
+                        {
+                          "id": "margherita",
+                          "title": "Margherita"
+                        }
+                      ]
+                    }
+                  ]
+                }
+                """;
+        ObjectMapper mapper = Jackson2ObjectMapperBuilder.json().build();
+        MenuDocument document = mapper.readValue(json, MenuDocument.class);
+
+        MenuDocument saved = menuDocumentService.replaceMenu(document);
+        MenuItem item = saved.getCategories().getFirst().getItems().getFirst();
+
+        assertThat(item.getTag2()).isEmpty();
+        assertThat(item.getBadges()).isEmpty();
+        assertThat(item.isAvailable()).isTrue();
+
+        String storedJson = Files.readString(tempDir.resolve("menu.json"));
+        assertThat(storedJson).doesNotContain("\"tag2\"");
+        assertThat(storedJson).doesNotContain("\"badges\" : [ ]");
+        assertThat(storedJson).contains("\"id\" : \"margherita\"");
     }
 
     @Test
