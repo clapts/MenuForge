@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MenuForge Admin Demo</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="product">MenuForge Demo</p>
+        <h1>Gestione menu</h1>
+      </div>
+      <div class="topbar-actions">
+        <button id="connectBtn" class="button primary" type="button">Connetti</button>
+        <button id="exportBtn" class="button" type="button">Esporta</button>
+        <label class="file-button">
+          Importa
+          <input id="importFile" type="file" accept="application/json">
+        </label>
+      </div>
+    </header>
+
+    <section class="connection-panel" aria-label="Connessione API">
+      <label>
+        Public API base
+        <input id="publicBase" value="http://localhost:8080/api/menu">
+      </label>
+      <label>
+        Admin API base
+        <input id="adminBase" value="http://localhost:8080/api/menu/admin">
+      </label>
+      <label>
+        Admin API key
+        <input id="apiKey" value="local-dev-key">
+      </label>
+      <p id="status" class="status">Non connesso</p>
+    </section>
+
+    <main class="workspace">
+      <aside class="sidebar" aria-label="Categorie">
+        <div class="section-heading">
+          <h2>Categorie</h2>
+          <button id="newCategoryBtn" class="icon-button" type="button" title="Nuova categoria">+</button>
+        </div>
+        <div id="categoryList" class="category-list"></div>
+      </aside>
+
+      <section class="content" aria-label="Prodotti">
+        <div class="section-heading">
+          <div>
+            <h2 id="activeCategoryTitle">Prodotti</h2>
+            <p id="activeCategoryMeta" class="muted">Seleziona una categoria.</p>
+          </div>
+          <button id="newItemBtn" class="button primary" type="button">Nuovo prodotto</button>
+        </div>
+
+        <div class="toolbar">
+          <input id="searchInput" placeholder="Cerca prodotto, ingrediente o tag">
+          <select id="availabilityFilter">
+            <option value="all">Tutti</option>
+            <option value="available">Disponibili</option>
+            <option value="unavailable">Non disponibili</option>
+            <option value="highlight">In evidenza</option>
+          </select>
+        </div>
+
+        <div id="itemList" class="item-list"></div>
+
+        <section class="preview-band" aria-label="Anteprima cliente">
+          <div class="section-heading">
+            <h3>Anteprima cliente</h3>
+            <span id="previewCount" class="counter">0 prodotti</span>
+          </div>
+          <div id="customerPreview" class="customer-preview"></div>
+        </section>
+      </section>
+
+      <aside class="inspector" aria-label="Editor">
+        <div class="tabs">
+          <button class="tab active" data-panel="itemPanel" type="button">Prodotto</button>
+          <button class="tab" data-panel="categoryPanel" type="button">Categoria</button>
+          <button class="tab" data-panel="badgePanel" type="button">Badge</button>
+          <button class="tab" data-panel="jsonPanel" type="button">JSON</button>
+        </div>
+
+        <form id="itemForm" class="panel active" data-panel-id="itemPanel">
+          <h2>Dettagli prodotto</h2>
+          <label>ID <input name="id" placeholder="margherita"></label>
+          <label>Titolo <input name="title" required placeholder="Margherita"></label>
+          <label>Prezzo <input name="price" placeholder="8,00"></label>
+          <label>Descrizione <textarea name="description" rows="4"></textarea></label>
+          <label>URL immagine <input name="imageUrl" placeholder="https://..."></label>
+          <div class="field-row">
+            <label>Posizione <input name="position" type="number" min="0"></label>
+            <label>Calorie <input name="calories" placeholder="420 kcal"></label>
+          </div>
+          <div class="field-row">
+            <label>Origine <input name="origin" placeholder="Italia"></label>
+            <label>Formato <input name="format" placeholder="Piatto"></label>
+          </div>
+          <label>Testo speciale 1 <input name="specialText1"></label>
+          <label>Testo speciale 2 <input name="specialText2"></label>
+          <label>Testo speciale 3 <input name="specialText3"></label>
+          <label>Ingredienti <input name="ingredients" placeholder="Pomodoro, Mozzarella, Basilico"></label>
+          <label>Tag 1 <input name="tag1" placeholder="vegetariano, classico"></label>
+          <label>Tag 2 <input name="tag2"></label>
+          <label>Tag 3 <input name="tag3"></label>
+          <label>Allergeni <input name="allergenNumbers" placeholder="1, 7"></label>
+          <label>Badge <input name="badgeIds" placeholder="chef, new"></label>
+          <div class="switch-row">
+            <label><input name="available" type="checkbox" checked> Disponibile</label>
+            <label><input name="highlight" type="checkbox"> In evidenza</label>
+          </div>
+          <div class="action-row">
+            <button class="button primary" type="submit">Salva prodotto</button>
+            <button id="deleteItemBtn" class="button danger" type="button">Elimina</button>
+          </div>
+        </form>
+
+        <form id="categoryForm" class="panel" data-panel-id="categoryPanel">
+          <h2>Dettagli categoria</h2>
+          <label>Slug <input name="slug" placeholder="pizze"></label>
+          <label>Titolo <input name="title" required placeholder="Pizze"></label>
+          <label>Sottotitolo <input name="subtitle"></label>
+          <label>Nota <textarea name="note" rows="3"></textarea></label>
+          <label>URL immagine <input name="categoryImageUrl"></label>
+          <label>Posizione <input name="position" type="number" min="0"></label>
+          <div class="switch-row">
+            <label><input name="visible" type="checkbox" checked> Visibile</label>
+          </div>
+          <div class="action-row">
+            <button class="button primary" type="submit">Salva categoria</button>
+            <button id="deleteCategoryBtn" class="button danger" type="button">Elimina</button>
+          </div>
+        </form>
+
+        <form id="badgeForm" class="panel" data-panel-id="badgePanel">
+          <h2>Badge menu</h2>
+          <label>ID <input name="id" placeholder="chef"></label>
+          <label>Etichetta <input name="label" placeholder="Scelto dallo chef"></label>
+          <label>Stile <input name="style" placeholder="accent"></label>
+          <button class="button primary" type="submit">Salva badge</button>
+          <div id="badgeList" class="badge-list"></div>
+        </form>
+
+        <section class="panel" data-panel-id="jsonPanel">
+          <h2>Documento completo</h2>
+          <textarea id="jsonEditor" class="json-editor" spellcheck="false"></textarea>
+          <div class="action-row">
+            <button id="replaceJsonBtn" class="button primary" type="button">Importa JSON</button>
+            <button id="copyJsonBtn" class="button" type="button">Copia</button>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <template id="emptyStateTemplate">
+    <div class="empty-state">
+      <strong>Nessun elemento selezionato</strong>
+      <span>Connettiti a un backend MenuForge o importa il file di esempio.</span>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -247,6 +247,7 @@ See [examples/README.md](examples/README.md) for:
 - a small public frontend fetch/render script;
 - an external HTTP client for bots/automation;
 - a realistic importable `MenuDocument` JSON.
+- a standalone non-technical admin demo in `../examples/menu-admin-demo`.
 
 ## Next Steps For A Real Site
 

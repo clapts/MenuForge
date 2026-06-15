@@ -34,3 +34,10 @@ PUT /api/menu/admin/import
 X-MenuForge-Key: your-secret-key
 Content-Type: application/json
 ```
+
+## Root-level `examples/menu-admin-demo`
+
+The repository root also contains `examples/menu-admin-demo`, a standalone
+static admin demo. It is intentionally outside `menuforge-core` and outside
+`test-app`, so it can be used as a non-technical playground against any
+MenuForge backend URL.
